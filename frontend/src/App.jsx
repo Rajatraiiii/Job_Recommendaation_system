@@ -125,9 +125,16 @@ function Login({ setUser }) {
         navigate('/profile');
       } catch (err) {
         if(err.response?.status === 400) {
-            // "Username already registered" -> Let's fake log them in by fetching their profile if we had an endpoint
-            // BUT we only have get /users/{user_id}. We can't lookup by username!
-            setError("Cannot login. Please create a unique username to register for now.");
+            // If the user already exists, let's try to log them in!
+            try {
+              const loginRes = await axios.post(`${API_URL}/users/login`, { username, password });
+              setUser(loginRes.data);
+              navigate('/profile');
+            } catch (loginErr) {
+              setError(loginErr.response?.data?.detail || 'Invalid username or password');
+            }
+        } else {
+            setError(err.response?.data?.detail || 'An error occurred');
         }
       }
     } catch (err) {
