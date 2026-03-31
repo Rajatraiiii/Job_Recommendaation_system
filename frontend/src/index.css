@@ -1,14 +1,59 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 antialiased selection:bg-indigo-200 selection:text-indigo-900;
+    @apply bg-[#f7f6f3] text-stone-900 antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  a, button {
+    cursor: pointer;
+  }
+
+  h1, h2 {
+    letter-spacing: -0.025em;
   }
 }
 
 @layer utilities {
-  .glass-card {
-    @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-xl;
+  .serif {
+    font-family: 'Instrument Serif', Georgia, serif;
+  }
+
+  .job-card {
+    @apply bg-white border border-stone-200 rounded-2xl transition-all duration-150;
+  }
+
+  .job-card:hover {
+    @apply border-stone-400 shadow-md -translate-y-0.5;
+  }
+
+  .pill {
+    @apply text-xs font-medium px-2.5 py-1 rounded-full;
+  }
+
+  .btn-primary {
+    @apply bg-stone-900 hover:bg-stone-700 text-white font-medium rounded-xl transition-colors;
+  }
+
+  .btn-ghost {
+    @apply border border-stone-300 hover:border-stone-400 bg-white hover:bg-stone-50 text-stone-700 font-medium rounded-xl transition-colors;
+  }
+
+  .input-base {
+    @apply w-full px-3.5 py-2.5 rounded-xl border border-stone-300 focus:ring-2 focus:ring-stone-400 focus:border-stone-400 outline-none bg-white text-stone-900 placeholder:text-stone-400 text-sm;
+  }
+
+  .section-label {
+    @apply text-[10px] uppercase tracking-widest font-semibold text-stone-400;
+  }
+
+  .score-high {
+    @apply bg-emerald-100 text-emerald-800;
+  }
+
+  .score-med {
+    @apply bg-blue-100 text-blue-800;
   }
 }
