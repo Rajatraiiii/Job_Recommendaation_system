@@ -2,8 +2,11 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
+from passlib.context import CryptContext
 
 import models, schemas, database, recommender
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Create database tables
 models.Base.metadata.create_all(bind=database.engine)
@@ -31,15 +34,15 @@ def get_db():
 def read_root():
     return {"message": "Welcome to the Job Recommendation System API"}
 
-# User Registration (simplified)
-@app.post("/users/", response_model=schemas.UserResponse, status_code=status.HTTP_201_CREATED)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+# User Registration
+@app.post("/users/register", response_model=schemas.UserResponse, status_code=status.HTTP_201_CREATED)
+def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(models.User).filter(models.User.username == user.username).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Username already registered")
     
-    # In a real app we would hash the password here
-    new_user = models.User(username=user.username, hashed_password=user.password)
+    hashed_password = pwd_context.hash(user.password)
+    new_user = models.User(username=user.username, hashed_password=hashed_password)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -48,7 +51,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 @app.post("/users/login", response_model=schemas.UserResponse)
 def login_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(models.User).filter(models.User.username == user.username).first()
-    if not db_user or db_user.hashed_password != user.password:
+    if not db_user or not pwd_context.verify(user.password, db_user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid username or password")
     return db_user
 
