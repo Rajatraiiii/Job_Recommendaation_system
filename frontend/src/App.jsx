@@ -11,6 +11,7 @@ import BrowseJobs from './pages/BrowseJobs';
 import JobDetail from './pages/JobDetail';
 import Dashboard from './pages/Dashboard';
 import About from './pages/About';
+import CareerTips from './pages/CareerTips';
 
 const API_URL = 'http://localhost:8000';
 
@@ -48,6 +49,14 @@ function App() {
                 }
               >
                 About
+              </NavLink>
+              <NavLink
+                to="/career-tips"
+                className={({ isActive }) =>
+                  isActive ? 'text-stone-900 font-medium' : 'text-stone-500 hover:text-stone-800 transition-colors'
+                }
+              >
+                Career Tips
               </NavLink>
               {user && (
                 <>
@@ -128,6 +137,7 @@ function App() {
               element={user ? <Dashboard user={user} /> : <Login setUser={setUser} />}
             />
             <Route path="/about" element={<About />} />
+            <Route path="/career-tips" element={<CareerTips />} />
           </Routes>
         </main>
       </div>
