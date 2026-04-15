@@ -15,7 +15,7 @@ import About from './pages/About';
 const API_URL = 'http://localhost:8000';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState('demo');
 
   return (
     <Router>
@@ -450,7 +450,7 @@ function Recommendations({ user }) {
               key={idx}
               to={`/jobs/${rec.job.id}`}
               state={{ job: rec.job }}
-              className="job-card flex items-start justify-between p-4 gap-4 group block"
+              className="job-card flex items-start justify-between p-4 gap-4 group"
             >
               <div className="min-w-0">
                 <p className="font-semibold text-stone-900 group-hover:text-stone-700 truncate">{rec.job.title}</p>
